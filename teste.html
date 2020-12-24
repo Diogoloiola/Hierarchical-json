@@ -1,0 +1,86 @@
+<body>
+
+</body>
+<script src="jquery/jquery-1.9.1.min.js"></script>
+<script>
+    let caminho = "D/repositorios/novo-estudo/activemq-activemq-5.15.11/conteudo/arquivos/activemq-amqp/src/main/java/org/apache/activemq/transport/amqp/AmqpProtocolConverter.java";
+    let novos = caminho.split('/')
+    let obj = []
+    let nives = geraNivel();
+    novos.forEach((element, indice) => {
+        if (obj.length) {
+            obj[0][`${nives[indice]}`] = element
+        } else
+            obj.push(createObj(nives[indice], element))
+
+    });
+    var newData = {
+            name: "Inicio",
+            children: []
+        },
+        levels = nives
+    console.log(novos.length)
+    data = obj
+    data.forEach(function(d) {
+        var depthCursor = newData.children;
+        levels.forEach(function(property, depth) {
+            var index;
+            depthCursor.forEach(function(child, i) {
+                if (d[property] == child.name)
+                    index = i;
+            });
+
+            if (isNaN(index)) {
+
+                let str = d[property];
+
+                let novaStr = new String(str)
+
+                if (novaStr.indexOf('.java') != -1) {
+                    depthCursor.push({
+                        name: d[property],
+                        value: 190
+                    });
+                } else {
+
+                    depthCursor.push({
+                        name: d[property],
+                        children: []
+                    });
+                }
+
+
+                index = depthCursor.length - 1;
+            }
+
+            depthCursor = depthCursor[index].children;
+
+            if (depth === levels.length - 1) {
+                try {
+                    depthCursor.push({
+                        name: d.name
+                    });
+                } catch (error) {
+                    console.log(error)
+                }
+
+            }
+        });
+    });
+    $('body').html('<pre>' + JSON.stringify(newData, null, '\t') + '</pre>');
+    console.log(newData)
+
+    function geraNivel() {
+        let nives = []
+        for (let i = 0; i < 16; i++) {
+            nives.push(`nives${i+1}`)
+        }
+        return nives;
+    }
+
+    function createObj(nivel, elemento) {
+        return {
+            nives1: elemento
+        }
+    }
+</script>
