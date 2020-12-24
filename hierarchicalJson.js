@@ -30,7 +30,13 @@ class hierarchicalJson {
             let arrayPaths = this.paths[i].split('/');
             arrayPaths.forEach((path, index) => {
                 if (this.objs.length) {
-                    this.objs[this.sizeObj][`${this.levels[this.sizeLevel]}`] = path
+
+                    if (this.objs[this.sizeObj] === undefined) {
+                        let level = this.levels[this.sizeLevel];
+                        this.objs.push(this.objFactory(path))
+                    } else {
+                        this.objs[this.sizeObj][`${this.levels[index]}`] = path
+                    }
                     this.sizeLevel++
                 } else {
                     this.objs.push(this.objFactory(path))
@@ -44,47 +50,61 @@ class hierarchicalJson {
         console.log(this.objs)
         let sizelevels = this.levels.length;
         this.objs.forEach((d) => {
+
             let depthCursor = this.date.children
 
-            this.levels.forEach(function(property, depth) {
+            let levels = this.levels.slice(0, d.length);
+
+            levels.forEach(function(property, depth) {
 
                 let index
 
-                depthCursor.forEach((child, i) => {
-                    if (d[property] == child.name)
-                        index = i;
-                });
+                try {
+                    depthCursor.forEach((child, i) => {
+                        if (d[property] == child.name)
+                            index = i;
+                    });
 
-                if (isNaN(index)) {
-                    let newString = new String(d[property])
+                    if (isNaN(index)) {
+                        let newString = new String(d[property])
 
 
-                    if (newString.indexOf('.java') != -1) {
-                        depthCursor.push({
-                            name: d[property],
-                            value: 190
-                        });
-                    } else {
+                        if (newString.indexOf('.java') != -1) {
+                            depthCursor.push({
+                                name: d[property],
+                                value: 190
+                            });
+                        } else {
 
-                        depthCursor.push({
-                            name: d[property],
-                            children: []
-                        });
+                            depthCursor.push({
+                                name: d[property],
+                                children: []
+                            });
+                        }
+
+                        index = depthCursor.length - 1;
                     }
-
-                    index = depthCursor.length - 1;
+                } catch (error) {
+                    console.log(error)
                 }
-                depthCursor = depthCursor[index].children;
-                if (depth === sizelevels - 1) {
-                    try {
-                        depthCursor.push({
-                            name: d.name
-                        });
-                    } catch (error) {
-                        console.log(error)
+
+
+                try {
+                    depthCursor = depthCursor[index].children;
+                    if (depth === sizelevels - 1) {
+                        try {
+                            depthCursor.push({
+                                name: d.name
+                            });
+                        } catch (error) {
+                            console.log(error)
+                        }
+
                     }
-
+                } catch (error) {
+                    console.log(error)
                 }
+
             })
         })
     }
