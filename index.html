@@ -4,20 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 
 <body>
+    <div class="conteudo">
+        <div>
+            <h3>Caminho de um arquivo para JSON</h3>
+            <p>Converta o caminho de um arquivo em JSON</p>
+            <div>
+                <div>
+                    <input class="input" type="text">
+                </div>
+                <div class="mt-1">
+                    <button onclick="geraJSON()" class="btn btn-azul">Criar</button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-1">
+            <div>
+                <h3>Saida</h3>
+            </div>
+            <div>
+                <div class="form textarea">
+
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="hierarchicalJson.js"></script>
     <script>
-        let jsonHelper = new hierarchicalJson
-        jsonHelper.pushPath("D/repositorios/novo-estudo/activemq-activemq-5.15.11/conteudo/arquivos/activemq-amqp/src/main/java/org/apache/activemq/transport/amqp/AmqpProtocolConverter.java")
-        jsonHelper.pushPath("D/repositorios/novo-estudo/activemq-activemq-5.15.11/conteudo/arquivos/activemq-amqp/src/main/java/org/apache/AmqpProtocolConverter.java")
-        jsonHelper.creteDataObj()
-        jsonHelper.createHierarchicalJson()
-        document.body.innerHTML = '<pre>' +
-            JSON.stringify(jsonHelper.date, null, '\t')
-        '</pre>';
+        function geraJSON() {
+            let caminho = document.querySelector('input').value
+            let jsonHelper = new hierarchicalJson
+            jsonHelper.pushPath(caminho)
+            jsonHelper.creteDataObj()
+            jsonHelper.createHierarchicalJson()
+
+            document.querySelector('.textarea').innerHTML = '<pre>' +
+                JSON.stringify(jsonHelper.date, null, '\t')
+            '</pre>';
+        }
     </script>
 </body>
 
