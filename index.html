@@ -41,7 +41,7 @@
             jsonHelper.pushPath(caminho)
             jsonHelper.creteDataObj()
             jsonHelper.createHierarchicalJson()
-
+            document.querySelector('.textarea').innerHTML = ''
             document.querySelector('.textarea').innerHTML = '<pre>' +
                 JSON.stringify(jsonHelper.date, null, '\t')
             '</pre>';
